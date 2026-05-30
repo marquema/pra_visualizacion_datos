@@ -1,4 +1,4 @@
-# Guion del Vídeo Explicativo (4-6 minutos)
+# Guion del Vídeo Explicativo
 
 **Proyecto:** Desarrollo Humano, Sostenibilidad y Brecha de Género  
 **Autor:** Marcos Marqués Primo  
@@ -6,167 +6,82 @@
 
 ---
 
-## 0. Intro (0:00 – 0:15) — 15 segundos
+## Introducción (0:00 – 0:15)
 
-> "Hola, soy Marcos Marqués. En este vídeo presento mi proyecto de visualización de datos: un dashboard interactivo que explora la relación entre desarrollo humano, igualdad de género y sostenibilidad medioambiental en 220 países durante el periodo 2010-2023."
-
----
-
-## 1. Proceso de creación [20%] (0:15 – 1:15) — 60 segundos
-
-**Qué contar:**
-
-- **Etapas del desarrollo:**
-  1. Definición de preguntas de investigación (Parte 1)
-  2. Selección y descarga de fuentes (PNUD, OWID, Banco Mundial)
-  3. ETL en Python: limpieza, normalización ISO-3, cruce de 3 fuentes
-  4. Diseño del dashboard: wireframes, elección de gráficos por pregunta
-  5. Implementación en D3.js + HTML/CSS
-  6. Despliegue en GitHub Pages
-
-- **Decisiones de diseño:**
-  - Paleta verde-lila: verde = sostenibilidad, lila = igualdad de género (simbolismo intencional)
-  - Navegación por pestañas: cada sección responde una pregunta concreta
-  - Mapa como punto de entrada: visión global antes de profundizar
-  - Scatter plots con tamaño = población: contextualiza la relevancia de cada país
-  - Serie temporal con comparación: permite al usuario construir su propia narrativa
-
-- **Fundamentos:**
-  - Principios de Tufte: maximizar ratio datos/tinta
-  - Gramática de gráficos: posición para variables principales, color para categorías
-  - Accesibilidad: contraste WCAG, navegación por teclado, etiquetas ARIA
-
-**[Mostrar brevemente el código ETL y la estructura de carpetas]**
+Hola, soy Marcos Marqués Primo. En este vídeo os presento mi proyecto de visualización de datos para la asignatura de Visualización de Datos del Máster. He construido un dashboard interactivo que permite explorar la relación entre tres grandes dimensiones del progreso global: el desarrollo humano, la igualdad de género y la sostenibilidad medioambiental. El análisis abarca 220 países a lo largo de catorce años, desde 2010 hasta 2023.
 
 ---
 
-## 2. Presentación en vivo [20%] (1:15 – 2:25) — 70 segundos
+## Proceso de creación (0:15 – 1:15)
 
-**Qué hacer:** Navegar por el dashboard en vivo mostrando:
+El proyecto ha seguido un proceso de desarrollo en varias fases. Todo comenzó con la formulación de tres preguntas de investigación que me parecían relevantes y que quería responder visualmente. A partir de ahí, identifiqué las fuentes de datos que necesitaba y las descargué.
 
-1. **Mapa Global** (20s)
-   - Cambiar métrica: HDI → GII → CO₂ → Renovables
-   - Mover slider de año: mostrar que CO₂ cambia en el tiempo
-   - Hacer zoom en Europa, hover sobre España
-   - "El mapa permite una exploración geográfica inmediata"
+El siguiente paso fue el más técnico: construir un script en Python que extrajera, transformara y cruzara las tres fuentes de datos en un único dataset coherente. El principal desafío fue la normalización de los nombres de país, ya que cada fuente utiliza convenciones distintas. El PNUD usa nombres literales como "Korea (Republic of)" mientras que OWID y el Banco Mundial usan códigos ISO de tres letras. Tuve que crear una tabla de mapeo con más de cuarenta correspondencias manuales para garantizar que todos los registros se alinearan correctamente.
 
-2. **Paradoja Económica** (15s)
-   - Mostrar scatter GNI vs Participación laboral femenina
-   - Señalar países ricos con baja participación (Arabia Saudí, Qatar)
-   - Señalar países con alta participación y renta media (Ruanda, Mozambique)
-
-3. **Correlación Verde-Lila** (15s)
-   - Hover sobre puntos: mostrar tooltip
-   - "No hay correlación lineal clara, pero los países con bajo GII tienden a tener más renovables"
-
-4. **Evolución Temporal** (10s)
-   - Añadir España, Noruega, China: comparar trayectorias CO₂
-
-5. **Ranking IESE** (10s)
-   - Mostrar top 30: "Países nórdicos dominan, combinan alto HDI, bajo GII y baja huella"
+En cuanto al diseño visual, tomé varias decisiones deliberadas. La paleta de colores no es arbitraria: el verde representa la sostenibilidad ambiental y el lila representa la igualdad de género, que es el color universal del feminismo. La estructura de navegación por pestañas responde a un principio claro: cada sección del dashboard está diseñada para responder una pregunta concreta. Elegí D3.js como herramienta porque me daba control total sobre cada elemento visual, y el despliegue en GitHub Pages permite que cualquier persona acceda sin necesidad de instalar nada.
 
 ---
 
-## 3. Conjunto de datos [15%] (2:25 – 3:15) — 50 segundos
+## Presentación en vivo (1:15 – 2:25)
 
-**Qué contar:**
+Vamos a navegar por el dashboard. La primera vista es un mapa coroplético global. Aquí puedo seleccionar distintas métricas: si elijo el Índice de Desarrollo Humano, vemos inmediatamente el patrón norte-sur. Si cambio a desigualdad de género, el mapa se transforma y aparecen patrones diferentes. El slider de año me permite ver cómo evolucionan estas métricas en el tiempo. Puedo hacer zoom para centrarme en una región y al pasar el ratón sobre cualquier país aparece un tooltip con el valor exacto.
 
-- **Origen:** 3 fuentes de prestigio internacional
-  - PNUD HDR 2025: HDI, GII, esperanza de vida, escolaridad, participación laboral
-  - OWID Energy: CO₂, renovables, fósiles — serie temporal completa
-  - Banco Mundial: PIB PPP como complemento macroeconómico
+En la segunda sección tenemos la paradoja económica. Este scatter plot enfrenta la renta nacional bruta contra la participación laboral femenina. Cada punto es un país, el tamaño refleja su población y el color indica su nivel de desigualdad de género. Lo interesante es que no hay una relación lineal clara: hay países muy ricos con participación femenina bajísima y países de renta media donde las mujeres participan mucho más.
 
-- **Proceso de preparación (ETL):**
-  - Script Python (`etl_dataset_final.py`)
-  - Desafío principal: normalización de nombres de país → mapeo ISO-3 (42 mapeos manuales)
-  - PNUD solo tiene snapshot 2023; OWID aporta la serie temporal
-  - Resultado: 3.078 registros × 27 variables × 220 países
+La tercera sección explora si existe correlación entre igualdad de género y energías renovables. Aquí vemos el índice de desigualdad de género en el eje horizontal y el porcentaje de electricidad renovable en el vertical. Se intuye una tendencia, pero no es determinante.
 
-- **Métrica propia (IESE):**
-  - Fórmula: `HDI × (1 - GII) / CO₂_normalizado`
-  - Penaliza desigualdad de género Y huella de carbono
-  - Premia desarrollo humano eficiente y equitativo
+En la cuarta sección puedo comparar la evolución temporal de distintos países. Añado España, Noruega y China, y veo cómo sus trayectorias de CO₂ per cápita divergen a lo largo de los años.
 
-- **Completitud:** HDI 84%, GII 77%, CO₂ 95%, Renovables 95%
+Finalmente, el ranking IESE muestra los países que mejor combinan desarrollo humano, equidad de género y baja huella de carbono. Los países nórdicos dominan esta clasificación.
 
 ---
 
-## 4. Preguntas clave [20%] (3:15 – 4:25) — 70 segundos
+## Conjunto de datos (2:25 – 3:15)
 
-**Pregunta 1: La paradoja económica** (25s)
-> "¿Garantiza una renta alta la equidad de género?"
+El dataset final es de elaboración propia. No utilicé un conjunto de datos preexistente, sino que construí uno cruzando tres fuentes de alto prestigio internacional.
 
-- Respuesta visual: scatter plot GNI vs Labour_Force_Female
-- Hallazgo: NO. Países del Golfo tienen GNI altísimo pero participación femenina <20%. Países africanos con renta baja superan el 60%.
-- Conclusión: la riqueza no implica equidad; factores culturales y legislativos pesan más.
+La primera fuente es el Programa de las Naciones Unidas para el Desarrollo, del que extraje el Índice de Desarrollo Humano y el Índice de Desigualdad de Género, junto con variables como esperanza de vida, años de escolaridad, participación laboral femenina y representación parlamentaria.
 
-**Pregunta 2: El coste del desarrollo** (25s)
-> "¿Se puede tener alto HDI con baja huella de carbono?"
+La segunda fuente es Our World in Data, que aporta toda la dimensión energética y medioambiental: emisiones de gases de efecto invernadero, porcentaje de renovables, consumo energético. Esta fuente es la que proporciona la serie temporal completa.
 
-- Respuesta visual: mapa HDI + ranking IESE
-- Hallazgo: Sí, pero son pocos. Noruega, Suecia, Suiza, Costa Rica lo logran. La mayoría de países con HDI>0.9 tienen CO₂>5t/persona.
-- El IESE identifica estos "campeones de la eficiencia".
+La tercera fuente es el Banco Mundial, que complementa con el PIB en paridad de poder adquisitivo.
 
-**Pregunta 3: Correlación verde-lila** (20s)
-> "¿Menos desigualdad de género = más renovables?"
-
-- Respuesta visual: scatter GII vs Renewables
-- Hallazgo: Tendencia débil pero visible. Países con GII<0.1 tienen en promedio más renovables. Pero hay excepciones (Islandia: 100% renovable; países nórdicos lideran ambos).
-- No es causalidad, pero sugiere que sociedades más igualitarias priorizan la transición energética.
+El resultado es un dataset de más de tres mil registros con veintisiete variables. Además, diseñé una métrica propia que he llamado Índice de Eficiencia Sostenible y Equitativa, o IESE. Su fórmula multiplica el HDI por uno menos el GII, y divide entre el CO₂ normalizado. De esta forma, premia a los países que logran alto desarrollo con equidad y bajo impacto ambiental.
 
 ---
 
-## 5. Interactividad [15%] (4:25 – 5:15) — 50 segundos
+## Preguntas clave (3:15 – 4:25)
 
-**Elementos interactivos:**
+La primera pregunta que me planteé fue si la riqueza garantiza la equidad de género. La respuesta visual es clara: no. El scatter plot muestra que países del Golfo Pérsico como Arabia Saudí o Qatar tienen rentas per cápita altísimas pero una participación laboral femenina inferior al veinte por ciento. En cambio, países africanos como Ruanda o Mozambique, con rentas mucho más bajas, superan el sesenta por ciento. Esto sugiere que los factores culturales y legislativos pesan más que la riqueza económica.
 
-| Elemento | Sección | Contribución UX |
-|----------|---------|-----------------|
-| Selector de métrica | Mapa | Exploración multidimensional sin cambiar de vista |
-| Slider temporal | Mapa | Animación de cambios año a año |
-| Zoom + pan | Mapa | Detalle regional sin perder contexto global |
-| Tooltips hover | Todas | Información bajo demanda (principio de Shneiderman) |
-| Selector eje Y | Paradoja | Reformular la pregunta en tiempo real |
-| Añadir/quitar países | Temporal | Comparación personalizada |
-| Selector top N | Ranking | Control de densidad informativa |
+La segunda pregunta era si es posible alcanzar un alto nivel de desarrollo humano sin comprometer el planeta. El ranking IESE responde a esto: sí es posible, pero son pocos los que lo logran. Noruega, Suecia, Suiza y Costa Rica aparecen consistentemente en los primeros puestos. La mayoría de países con HDI superior a 0,9 tienen emisiones por encima de cinco toneladas por persona.
 
-**Accesibilidad:**
-- Etiquetas ARIA en todos los controles y gráficos SVG
-- Navegación por teclado (tab entre controles)
-- Contraste de colores cumple ratio mínimo
-- `prefers-reduced-motion`: desactiva transiciones
-- `prefers-color-scheme: dark`: modo oscuro automático
-- Tooltips con `role="tooltip"` para lectores de pantalla
+La tercera pregunta exploraba si existe relación entre igualdad de género y adopción de renovables. El scatter plot muestra una tendencia débil pero visible: los países con menor desigualdad de género tienden a tener mayor porcentaje de electricidad renovable. No podemos hablar de causalidad, pero sugiere que las sociedades más igualitarias también priorizan la transición energética.
 
 ---
 
-## 6. Reflexión final [10%] (5:15 – 5:50) — 35 segundos
+## Interactividad y accesibilidad (4:25 – 5:15)
 
-**¿Qué he aprendido?**
-- Los datos cuentan historias que los indicadores aislados no revelan. Cruzar HDI con GII y CO₂ muestra que el "desarrollo" tiene muchas dimensiones.
-- D3.js ofrece un control total sobre la visualización, pero requiere mucho más esfuerzo que herramientas como Tableau.
+El dashboard incorpora múltiples elementos interactivos que siguen el mantra de Shneiderman: visión general primero, zoom y filtrado, y detalles bajo demanda.
 
-**¿Qué limitaciones he encontrado?**
-- El PNUD solo publica un snapshot (2023), no series históricas en formato abierto. Esto limita el análisis temporal de HDI/GII.
-- El CO₂ de OWID es de emisiones totales de GEI, no solo CO₂ puro.
-- Algunos países pequeños (islas) carecen de datos energéticos.
+El mapa ofrece selección de métrica, slider temporal y zoom con arrastre. Los scatter plots tienen tooltips que aparecen al pasar el ratón, mostrando información detallada de cada país. La vista temporal permite añadir y quitar países para construir comparaciones personalizadas. Y el ranking permite ajustar cuántos países se muestran.
 
-**¿Qué me habría gustado hacer?**
-- Añadir un modelo predictivo: ¿qué países mejorarán su IESE en 2030?
-- Implementar brushing & linking entre todas las vistas simultáneamente.
-- Incluir una vista de small multiples para comparar regiones.
+En cuanto a accesibilidad, he implementado etiquetas ARIA en todos los controles y gráficos SVG para que los lectores de pantalla puedan interpretar la estructura. Los controles son navegables por teclado. He respetado ratios de contraste adecuados y el CSS incluye media queries para desactivar animaciones cuando el usuario tiene configurada la preferencia de movimiento reducido, así como un modo oscuro automático.
 
 ---
 
-## Cierre (5:50 – 6:00) — 10 segundos
+## Reflexión final (5:15 – 5:50)
 
-> "Gracias por vuestra atención. El dashboard está disponible en GitHub Pages y el código fuente es abierto. Cualquier duda, estoy a vuestra disposición."
+De este proyecto me llevo varios aprendizajes. El primero es que los datos cuentan historias que los indicadores aislados no revelan. Cruzar desarrollo humano con desigualdad de género y huella de carbono muestra que el progreso tiene muchas dimensiones y que no todos los modelos de desarrollo son equivalentes.
+
+El segundo aprendizaje es técnico: D3.js ofrece un control absoluto sobre la visualización, pero a cambio exige mucho más esfuerzo que herramientas como Tableau o Flourish.
+
+En cuanto a limitaciones, la principal es que el PNUD solo publica un snapshot del año más reciente, no series históricas en formato abierto. Esto impide analizar cómo han evolucionado el HDI y el GII país a país. También hay países pequeños, especialmente islas del Pacífico, que carecen de datos energéticos.
+
+Si pudiera continuar el proyecto, me habría gustado implementar un modelo predictivo para estimar qué países mejorarán su IESE hacia 2030, y añadir brushing and linking entre todas las vistas para que al seleccionar un país en el mapa se resalte automáticamente en el resto de gráficos.
 
 ---
 
-## Notas de producción
+## Cierre (5:50 – 6:00)
 
-- **Herramienta de grabación:** OBS Studio o grabación de pantalla de Windows
-- **Formato:** Pantalla compartida con el dashboard + voz en off
-- **Tip:** Ensayar 2 veces antes de grabar. Cronometrar cada sección.
-- **Duración total estimada:** ~5:50 (dentro del rango 4-6 min)
+Muchas gracias por vuestra atención. El dashboard está disponible públicamente en GitHub Pages y todo el código fuente es abierto. Cualquier duda, estoy a vuestra disposición.
