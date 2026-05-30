@@ -1,0 +1,320 @@
+/* =============================================================================
+   VARIABLES Y RESET
+   ============================================================================= */
+:root {
+    --verde: #2d8a4e;
+    --verde-claro: #4caf50;
+    --lila: #7b2d8b;
+    --lila-claro: #ab47bc;
+    --bg: #f8f9fa;
+    --bg-card: #ffffff;
+    --text: #212529;
+    --text-muted: #6c757d;
+    --border: #dee2e6;
+    --shadow: 0 2px 8px rgba(0,0,0,0.08);
+    --radius: 8px;
+    --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+}
+
+/* =============================================================================
+   HEADER
+   ============================================================================= */
+.header {
+    background: linear-gradient(135deg, var(--verde) 0%, var(--lila) 100%);
+    color: white;
+    text-align: center;
+    padding: 2rem 1rem;
+}
+
+.header h1 {
+    font-size: clamp(1.4rem, 3vw, 2.2rem);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    font-size: 0.95rem;
+    opacity: 0.9;
+}
+
+/* =============================================================================
+   NAVEGACIÓN
+   ============================================================================= */
+.nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-btn {
+    padding: 0.6rem 1.2rem;
+    border: 2px solid var(--border);
+    border-radius: 2rem;
+    background: transparent;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.nav-btn:hover {
+    border-color: var(--verde);
+    color: var(--verde);
+}
+
+.nav-btn.active {
+    background: linear-gradient(135deg, var(--verde), var(--lila));
+    color: white;
+    border-color: transparent;
+}
+
+.nav-btn:focus-visible {
+    outline: 3px solid var(--lila-claro);
+    outline-offset: 2px;
+}
+
+/* =============================================================================
+   SECCIONES
+   ============================================================================= */
+.section {
+    display: none;
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.section.active {
+    display: block;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.section-header h2 {
+    font-size: 1.5rem;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+}
+
+.section-header p {
+    color: var(--text-muted);
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.formula {
+    font-family: 'Courier New', monospace;
+    background: #f0f0f0;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius);
+    display: inline-block;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+}
+
+/* =============================================================================
+   CONTROLES
+   ============================================================================= */
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.controls label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.controls select,
+.controls input[type="range"] {
+    padding: 0.4rem 0.8rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 0.85rem;
+}
+
+.controls select:focus,
+.controls input:focus {
+    outline: 2px solid var(--verde);
+    outline-offset: 1px;
+}
+
+.btn-add, .btn-clear {
+    padding: 0.4rem 0.8rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.btn-add {
+    background: var(--verde);
+    color: white;
+}
+
+.btn-clear {
+    background: var(--border);
+    color: var(--text);
+}
+
+/* =============================================================================
+   CHARTS
+   ============================================================================= */
+.chart-container {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 1rem;
+    min-height: 450px;
+    position: relative;
+}
+
+.chart-container svg {
+    width: 100%;
+    height: 100%;
+}
+
+/* =============================================================================
+   TOOLTIP
+   ============================================================================= */
+.tooltip {
+    position: absolute;
+    background: rgba(33, 37, 41, 0.95);
+    color: white;
+    padding: 0.6rem 0.9rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+    z-index: 200;
+    max-width: 250px;
+    line-height: 1.4;
+}
+
+.tooltip.visible {
+    opacity: 1;
+}
+
+/* =============================================================================
+   LEGEND
+   ============================================================================= */
+.legend {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.legend svg {
+    overflow: visible;
+}
+
+/* =============================================================================
+   FOOTER
+   ============================================================================= */
+.footer {
+    text-align: center;
+    padding: 2rem 1rem;
+    margin-top: 3rem;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.footer a {
+    color: var(--verde);
+    text-decoration: none;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+.sources {
+    margin-top: 0.5rem;
+}
+
+/* =============================================================================
+   RESPONSIVE
+   ============================================================================= */
+@media (max-width: 768px) {
+    .controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .chart-container {
+        min-height: 350px;
+    }
+
+    .nav-btn {
+        font-size: 0.75rem;
+        padding: 0.5rem 0.8rem;
+    }
+}
+
+/* =============================================================================
+   ACCESIBILIDAD
+   ============================================================================= */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none !important;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #1a1a2e;
+        --bg-card: #16213e;
+        --text: #e0e0e0;
+        --text-muted: #a0a0a0;
+        --border: #2a2a4a;
+    }
+}
+
+/* Screen reader only */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}

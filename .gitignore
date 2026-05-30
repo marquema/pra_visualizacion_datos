@@ -1,0 +1,27 @@
+# Archivos grandes / binarios que no deben subirse
+*.mp4
+*.zip
+*.gz
+*.sav
+*.sas7bdat
+*.dta
+*.docx
+
+# Datos originales pesados (se pueden regenerar)
+parte1/datos_2018/
+parte1/estat_aact_ali01_en.csv/
+parte1/estat_lfsi_emp_a.tsv/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/

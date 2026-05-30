@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desarrollo Humano, Sostenibilidad y Brecha de Género</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://d3js.org/topojson.v3.min.js"></script>
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="header">
+        <h1>Desarrollo Humano, Sostenibilidad y Brecha de Género</h1>
+        <p class="subtitle">Un análisis multidimensional (2010–2023) · 220 países · 3 fuentes de datos</p>
+    </header>
+
+    <!-- NAVEGACIÓN -->
+    <nav class="nav" role="navigation" aria-label="Secciones del dashboard">
+        <button class="nav-btn active" data-section="mapa" aria-pressed="true">🗺️ Mapa Global</button>
+        <button class="nav-btn" data-section="paradoja" aria-pressed="false">💰 Paradoja Económica</button>
+        <button class="nav-btn" data-section="correlacion" aria-pressed="false">🌿 Correlación Verde-Lila</button>
+        <button class="nav-btn" data-section="temporal" aria-pressed="false">📈 Evolución Temporal</button>
+        <button class="nav-btn" data-section="ranking" aria-pressed="false">🏆 Ranking IESE</button>
+    </nav>
+
+    <!-- SECCIONES -->
+    <main>
+        <!-- SECCIÓN 1: MAPA -->
+        <section id="mapa" class="section active" aria-label="Mapa coroplético global">
+            <div class="section-header">
+                <h2>Mapa Global de Indicadores</h2>
+                <p>Explora la distribución geográfica de desarrollo humano, desigualdad de género y sostenibilidad.</p>
+            </div>
+            <div class="controls">
+                <label for="map-metric">Métrica:</label>
+                <select id="map-metric" aria-label="Seleccionar métrica del mapa">
+                    <option value="HDI_Value">Índice de Desarrollo Humano (HDI)</option>
+                    <option value="GII_Value">Índice de Desigualdad de Género (GII)</option>
+                    <option value="CO2_PerCapita">CO₂ per cápita (t)</option>
+                    <option value="Renewables_Share_Elec">% Electricidad Renovable</option>
+                    <option value="IESE">Índice IESE (propio)</option>
+                </select>
+                <label for="map-year">Año:</label>
+                <input type="range" id="map-year" min="2010" max="2023" value="2023" step="1" aria-label="Seleccionar año">
+                <span id="map-year-label">2023</span>
+            </div>
+            <div id="map-container" class="chart-container"></div>
+            <div id="map-legend" class="legend"></div>
+        </section>
+
+        <!-- SECCIÓN 2: PARADOJA ECONÓMICA -->
+        <section id="paradoja" class="section" aria-label="Paradoja económica">
+            <div class="section-header">
+                <h2>La Paradoja Económica</h2>
+                <p>¿Garantiza una Renta Nacional Bruta alta una participación equitativa de la mujer en el mercado laboral?</p>
+            </div>
+            <div class="controls">
+                <label for="paradoja-y">Eje Y:</label>
+                <select id="paradoja-y" aria-label="Variable eje Y">
+                    <option value="Labour_Force_Female">Participación laboral femenina (%)</option>
+                    <option value="Seats_Parliament_Female">Escaños parlamentarios mujeres (%)</option>
+                </select>
+            </div>
+            <div id="paradoja-container" class="chart-container"></div>
+            <div id="paradoja-tooltip" class="tooltip" role="tooltip"></div>
+        </section>
+
+        <!-- SECCIÓN 3: CORRELACIÓN VERDE-LILA -->
+        <section id="correlacion" class="section" aria-label="Correlación verde-lila">
+            <div class="section-header">
+                <h2>Correlación Verde-Lila</h2>
+                <p>¿Existe relación entre menor desigualdad de género y mayor adopción de energías renovables?</p>
+            </div>
+            <div id="correlacion-container" class="chart-container"></div>
+            <div id="correlacion-tooltip" class="tooltip" role="tooltip"></div>
+        </section>
+
+        <!-- SECCIÓN 4: EVOLUCIÓN TEMPORAL -->
+        <section id="temporal" class="section" aria-label="Evolución temporal">
+            <div class="section-header">
+                <h2>Evolución Temporal</h2>
+                <p>Compara la trayectoria de CO₂ y renovables de distintos países a lo largo del tiempo.</p>
+            </div>
+            <div class="controls">
+                <label for="temporal-country">País:</label>
+                <select id="temporal-country" aria-label="Seleccionar país"></select>
+                <label for="temporal-metric">Métrica:</label>
+                <select id="temporal-metric" aria-label="Seleccionar métrica temporal">
+                    <option value="CO2_PerCapita">CO₂ per cápita</option>
+                    <option value="Renewables_Share_Elec">% Electricidad Renovable</option>
+                    <option value="Fossil_Share_Energy">% Energía Fósil</option>
+                </select>
+                <button id="temporal-add" class="btn-add" aria-label="Añadir país a comparación">+ Añadir país</button>
+                <button id="temporal-clear" class="btn-clear" aria-label="Limpiar comparación">Limpiar</button>
+            </div>
+            <div id="temporal-container" class="chart-container"></div>
+        </section>
+
+        <!-- SECCIÓN 5: RANKING IESE -->
+        <section id="ranking" class="section" aria-label="Ranking IESE">
+            <div class="section-header">
+                <h2>Ranking: Índice de Eficiencia Sostenible y Equitativa</h2>
+                <p>¿Qué naciones logran alto desarrollo humano con equidad de género y baja huella de carbono?</p>
+                <p class="formula">IESE = HDI × (1 − GII) / CO₂ normalizado</p>
+            </div>
+            <div class="controls">
+                <label for="ranking-top">Mostrar top:</label>
+                <select id="ranking-top" aria-label="Número de países en ranking">
+                    <option value="20">20</option>
+                    <option value="30" selected>30</option>
+                    <option value="50">50</option>
+                </select>
+            </div>
+            <div id="ranking-container" class="chart-container"></div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <p>Marcos Marqués Primo · Máster en Ciencia de Datos · UOC 2026</p>
+        <p class="sources">Fuentes: <a href="https://hdr.undp.org" target="_blank" rel="noopener">PNUD HDR</a> · 
+        <a href="https://github.com/owid/energy-data" target="_blank" rel="noopener">OWID Energy</a> · 
+        <a href="https://data.worldbank.org" target="_blank" rel="noopener">Banco Mundial</a></p>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script src="js/main.js"></script>
+    <script src="js/map.js"></script>
+    <script src="js/scatter.js"></script>
+    <script src="js/temporal.js"></script>
+    <script src="js/ranking.js"></script>
+</body>
+</html>
