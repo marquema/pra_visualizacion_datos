@@ -118,7 +118,7 @@ function getColor(metric) {
         GII_Value: d3.scaleSequential(d3.interpolateRdPu).domain([0, 0.7]),
         CO2_PerCapita: d3.scaleSequential(d3.interpolateOrRd).domain([0, 20]),
         Renewables_Share_Elec: d3.scaleSequential(d3.interpolateGnBu).domain([0, 100]),
-        IESE: d3.scaleSequential(d3.interpolateViridis).domain([0, 6])
+        IESE: d3.scaleSequential(d3.interpolateViridis).domain([0, 1])
     };
     return scales[metric] || d3.scaleSequential(d3.interpolateBlues).domain([0, 1]);
 }

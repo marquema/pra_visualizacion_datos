@@ -352,11 +352,9 @@ def merge_all(hdi_df, gii_df, owid_df, wb_df, country_map):
     base = base.merge(pnud_merge, on="ISO3_Code", how="left")
 
     # 6.6 Calcular IESE (Índice de Eficiencia Sostenible y Equitativa)
-    # IESE = HDI^2 * (1 - GII) / log(1 + CO2_PerCapita)
-    # - HDI^2: pondera fuertemente el desarrollo (países con bajo HDI no dominan)
-    # - (1-GII): premia equidad de género
-    # - log(1+CO2): penaliza huella de carbono de forma logarítmica
-    # Solo se calcula para países con HDI >= 0.7 (desarrollo medio-alto)
+    # Media ponderada normalizada: 40% desarrollo + 30% equidad + 30% sostenibilidad
+    # Cada componente se normaliza entre 0 y 1 dentro del grupo HDI >= 0.8
+    # IESE = 0.4 * HDI_norm + 0.3 * (1 - GII_norm) + 0.3 * (1 - CO2_norm)
     import numpy as np
 
     mask = (
@@ -366,12 +364,20 @@ def merge_all(hdi_df, gii_df, owid_df, wb_df, country_map):
         (base["HDI_Value"] >= 0.8)
     )
 
-    base["IESE"] = np.where(
-        mask,
-        (base["HDI_Value"] ** 2) * (1 - base["GII_Value"].fillna(0))
-        / np.log1p(base["CO2_PerCapita"]),
-        np.nan
+    subset = base.loc[mask].copy()
+
+    # Normalizar componentes (min-max dentro del grupo)
+    hdi_min = subset["HDI_Value"].min()
+    hdi_max = subset["HDI_Value"].max()
+    gii_max = subset["GII_Value"].quantile(0.95)
+    co2_max = subset["CO2_PerCapita"].quantile(0.95)
+
+    base.loc[mask, "IESE"] = (
+        0.4 * ((subset["HDI_Value"] - hdi_min) / (hdi_max - hdi_min)) +
+        0.3 * (1 - (subset["GII_Value"].fillna(0) / gii_max).clip(0, 1)) +
+        0.3 * (1 - (subset["CO2_PerCapita"] / co2_max).clip(0, 1))
     )
+    base.loc[~mask, "IESE"] = np.nan
 
     # 6.7 Ordenar y limpiar
     base = base.sort_values(["ISO3_Code", "Year"]).reset_index(drop=True)
