@@ -363,7 +363,7 @@ def merge_all(hdi_df, gii_df, owid_df, wb_df, country_map):
         base["HDI_Value"].notna() &
         base["CO2_PerCapita"].notna() &
         (base["CO2_PerCapita"] > 0) &
-        (base["HDI_Value"] >= 0.7)
+        (base["HDI_Value"] >= 0.8)
     )
 
     base["IESE"] = np.where(
