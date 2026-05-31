@@ -55,7 +55,7 @@ function drawRanking() {
 
     // Color basado en HDI
     const colorScale = d3.scaleSequential(d3.interpolateViridis)
-        .domain([0.5, 1]);
+        .domain([0.8, 1]);
 
     // Eje Y (países)
     svg.append('g')
