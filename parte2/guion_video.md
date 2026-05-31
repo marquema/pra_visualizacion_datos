@@ -14,11 +14,15 @@ Hola, soy Marcos Marqués Primo. En este vídeo os presento mi proyecto de visua
 
 ## Proceso de creación (0:15 – 1:15)
 
-El proyecto ha seguido un proceso de desarrollo en varias fases. Todo comenzó con la formulación de tres preguntas de investigación que me parecían relevantes y que quería responder visualmente. A partir de ahí, identifiqué las fuentes de datos que necesitaba y las descargué.
+El proyecto ha seguido un proceso de desarrollo en varias fases bien diferenciadas.
 
-El siguiente paso fue el más técnico: construir un script en Python que extrajera, transformara y cruzara las tres fuentes de datos en un único dataset coherente. El principal desafío fue la normalización de los nombres de país, ya que cada fuente utiliza convenciones distintas. El PNUD usa nombres literales como "Korea (Republic of)" mientras que OWID y el Banco Mundial usan códigos ISO de tres letras. Tuve que crear una tabla de mapeo con más de cuarenta correspondencias manuales para garantizar que todos los registros se alinearan correctamente.
+La primera fase fue conceptual: formulé tres preguntas de investigación sobre la relación entre riqueza, género y medio ambiente, e identifiqué qué datos necesitaba para responderlas.
 
-En cuanto al diseño visual, tomé varias decisiones deliberadas. La paleta de colores no es arbitraria: el verde representa la sostenibilidad ambiental y el lila representa la igualdad de género, que es el color universal del feminismo. La estructura de navegación por pestañas responde a un principio claro: cada sección del dashboard está diseñada para responder una pregunta concreta. Elegí D3.js como herramienta porque me daba control total sobre cada elemento visual, y el despliegue en GitHub Pages permite que cualquier persona acceda sin necesidad de instalar nada.
+La segunda fase fue la ingeniería de datos. Descargué tres fuentes: los informes HDR del PNUD con los índices de desarrollo humano y desigualdad de género, el dataset de energía de Our World in Data con series temporales de emisiones y renovables, y el indicador de PIB del Banco Mundial. Escribí un script ETL en Python con pandas que automatiza todo el proceso: carga los Excel y CSV, normaliza los nombres de país mediante un mapeo ISO-3 con más de cuarenta correspondencias manuales, cruza las tres fuentes por código de país y año, y genera un dataset final de más de tres mil registros con veintisiete variables. Este script es reproducible: cualquiera puede ejecutarlo y obtener el mismo resultado.
+
+La tercera fase fue el diseño de la visualización. Aquí tomé varias decisiones deliberadas. La paleta de colores no es arbitraria: el verde representa la sostenibilidad ambiental y el lila representa la igualdad de género, que es el color universal del feminismo. La estructura de navegación por pestañas responde a un principio claro: cada sección del dashboard está diseñada para responder una pregunta concreta. Elegí D3.js como herramienta porque me daba control total sobre cada elemento visual y permite crear gráficos interactivos sin dependencias de servidor.
+
+La cuarta fase fue la implementación técnica. El stack es HTML, CSS y JavaScript puro con D3.js versión 7 y TopoJSON para el mapa. No hay framework ni proceso de build: los archivos se sirven directamente desde GitHub Pages, lo que garantiza que cualquier persona pueda acceder sin instalar nada.
 
 ---
 
@@ -32,7 +36,7 @@ La tercera sección explora si existe correlación entre igualdad de género y e
 
 En la cuarta sección puedo comparar la evolución temporal de distintos países. Añado España, Noruega y China, y veo cómo sus trayectorias de CO₂ per cápita divergen a lo largo de los años.
 
-Finalmente, el ranking IESE muestra los países que mejor combinan desarrollo humano, equidad de género y baja huella de carbono. Los países nórdicos dominan esta clasificación.
+Finalmente, el ranking IESE muestra los países que mejor combinan desarrollo humano, equidad de género y baja huella de carbono. La fórmula es HDI al cuadrado multiplicado por uno menos el GII, dividido entre el logaritmo del CO₂ per cápita. Esto premia a países que logran alto desarrollo con equidad y bajo impacto ambiental. Costa Rica lidera el ranking gracias a su modelo de casi cien por cien electricidad renovable con un HDI alto. Albania sorprende en segundo lugar por su electricidad casi totalmente hidroeléctrica y un GII muy bajo. Suiza aparece tercera con su combinación de desarrollo máximo y emisiones moderadas.
 
 ---
 
@@ -46,7 +50,7 @@ La segunda fuente es Our World in Data, que aporta toda la dimensión energétic
 
 La tercera fuente es el Banco Mundial, que complementa con el PIB en paridad de poder adquisitivo.
 
-El resultado es un dataset de más de tres mil registros con veintisiete variables. Además, diseñé una métrica propia que he llamado Índice de Eficiencia Sostenible y Equitativa, o IESE. Su fórmula multiplica el HDI por uno menos el GII, y divide entre el CO₂ normalizado. De esta forma, premia a los países que logran alto desarrollo con equidad y bajo impacto ambiental.
+El resultado es un dataset de más de tres mil registros con veintisiete variables. Además, diseñé una métrica propia que he llamado Índice de Eficiencia Sostenible y Equitativa, o IESE. Su fórmula eleva el HDI al cuadrado, lo multiplica por uno menos el GII, y divide entre el logaritmo natural de uno más el CO₂ per cápita. El cuadrado del HDI asegura que solo países con desarrollo medio-alto puntúen bien, evitando que países muy pobres con emisiones casi nulas dominen artificialmente. El logaritmo suaviza la penalización del CO₂ para que sea progresiva. Solo se calcula para países con HDI igual o superior a 0,7.
 
 ---
 
@@ -54,7 +58,7 @@ El resultado es un dataset de más de tres mil registros con veintisiete variabl
 
 La primera pregunta que me planteé fue si la riqueza garantiza la equidad de género. La respuesta visual es clara: no. El scatter plot muestra que países del Golfo Pérsico como Arabia Saudí o Qatar tienen rentas per cápita altísimas pero una participación laboral femenina inferior al veinte por ciento. En cambio, países africanos como Ruanda o Mozambique, con rentas mucho más bajas, superan el sesenta por ciento. Esto sugiere que los factores culturales y legislativos pesan más que la riqueza económica.
 
-La segunda pregunta era si es posible alcanzar un alto nivel de desarrollo humano sin comprometer el planeta. El ranking IESE responde a esto: sí es posible, pero son pocos los que lo logran. Noruega, Suecia, Suiza y Costa Rica aparecen consistentemente en los primeros puestos. La mayoría de países con HDI superior a 0,9 tienen emisiones por encima de cinco toneladas por persona.
+La segunda pregunta era si es posible alcanzar un alto nivel de desarrollo humano sin comprometer el planeta. El ranking IESE responde a esto: sí es posible, pero requiere un modelo energético específico. Costa Rica lidera con casi cien por cien de electricidad renovable y un HDI de 0,83. Albania sorprende en segundo lugar gracias a su generación hidroeléctrica. Suiza combina desarrollo máximo con emisiones moderadas. En cambio, países como Noruega o Australia, a pesar de su HDI altísimo, caen en el ranking por sus emisiones elevadas vinculadas a la producción de combustibles fósiles.
 
 La tercera pregunta exploraba si existe relación entre igualdad de género y adopción de renovables. El scatter plot muestra una tendencia débil pero visible: los países con menor desigualdad de género tienden a tener mayor porcentaje de electricidad renovable. No podemos hablar de causalidad, pero sugiere que las sociedades más igualitarias también priorizan la transición energética.
 
