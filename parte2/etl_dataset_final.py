@@ -352,28 +352,29 @@ def merge_all(hdi_df, gii_df, owid_df, wb_df, country_map):
     base = base.merge(pnud_merge, on="ISO3_Code", how="left")
 
     # 6.6 Calcular IESE (Índice de Eficiencia Sostenible y Equitativa)
-    # IESE = HDI * (1 - GII) / (CO2_PerCapita normalizado)
-    # Normalización: CO2 entre 0 y 1 usando min-max del dataset
-    co2_max = base["CO2_PerCapita"].quantile(0.95)  # usar percentil 95 para evitar outliers
-    co2_min = base["CO2_PerCapita"].min()
-    if co2_max > co2_min:
-        base["CO2_Normalized"] = (base["CO2_PerCapita"] - co2_min) / (co2_max - co2_min)
-        base["CO2_Normalized"] = base["CO2_Normalized"].clip(0.01, 1)  # evitar división por 0
-    else:
-        base["CO2_Normalized"] = 0.5
+    # IESE = HDI^2 * (1 - GII) / log(1 + CO2_PerCapita)
+    # - HDI^2: pondera fuertemente el desarrollo (países con bajo HDI no dominan)
+    # - (1-GII): premia equidad de género
+    # - log(1+CO2): penaliza huella de carbono de forma logarítmica
+    # Solo se calcula para países con HDI >= 0.7 (desarrollo medio-alto)
+    import numpy as np
 
-    base["IESE"] = (
-        base["HDI_Value"] * (1 - base["GII_Value"].fillna(0))
-        / base["CO2_Normalized"]
+    mask = (
+        base["HDI_Value"].notna() &
+        base["CO2_PerCapita"].notna() &
+        (base["CO2_PerCapita"] > 0) &
+        (base["HDI_Value"] >= 0.7)
     )
-    # Limitar IESE a valores razonables
-    base["IESE"] = base["IESE"].clip(0, 10)
+
+    base["IESE"] = np.where(
+        mask,
+        (base["HDI_Value"] ** 2) * (1 - base["GII_Value"].fillna(0))
+        / np.log1p(base["CO2_PerCapita"]),
+        np.nan
+    )
 
     # 6.7 Ordenar y limpiar
     base = base.sort_values(["ISO3_Code", "Year"]).reset_index(drop=True)
-
-    # Eliminar columna auxiliar
-    base = base.drop(columns=["CO2_Normalized"], errors="ignore")
 
     print(f"\n  Dataset final: {len(base)} registros")
     print(f"  Países: {base['ISO3_Code'].nunique()}")
