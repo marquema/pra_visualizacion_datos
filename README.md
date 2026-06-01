@@ -48,3 +48,7 @@ python -m http.server 8080
 ## Autor
 
 Marcos Marqués Primo
+
+## Licencia
+
+Este proyecto está licenciado bajo [MIT License](LICENSE).
